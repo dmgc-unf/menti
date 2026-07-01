@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study Live Board</title>
+  
+  <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+        "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+      }
+    }
+  </script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+    }
+    .app-container {
+      display: flex;
+      height: 100vh;
+      font-family: system-ui, sans-serif;
+      background: #f5f7fb;
+    }
+    .panel {
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+    .input-panel {
+      width: 40%;
+      background: white;
+      border-right: 1px solid #e1e8ed;
+      display: flex;
+      flex-direction: column;
+    }
+    .feed-panel {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+    }
+    .feed-container {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccd6dd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #0066cc;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:disabled {
+      background: #cccccc;
+    }
+    .post-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .time { color: #888; }
+    .post-body { margin: 0; white-space: pre-wrap; }
+    .empty { color: #888; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <div class="app-container">
+      <div class="panel input-panel">
+        <h2>Case Study Analysis</h2>
+        <p class="prompt">Based on the video, what is the primary risk associated with the current data governance framework?</p>
+        
+        <div class="form-group">
+          <label>Your Name / Alias:</label>
+          <input v-model="name" type="text" placeholder="e.g., John Doe" />
+        </div>
+
+        <div class="form-group">
+          <label>Your Technical Argument:</label>
+          <textarea v-model="answer" rows="6" placeholder="Write your analysis here..."></textarea>
+        </div>
+
+        <button @click="submitAnswer" :disabled="!name || !answer">Submit to Board</button>
+      </div>
+
+      <div class="panel feed-panel">
+        <h2>Peer Submissions (Live)</h2>
+        <div class="feed-container">
+          <div v-if="posts.length === 0" class="empty">Waiting for submissions...</div>
+          <div v-for="post in posts" :key="post.id" class="post-card">
+            <div class="post-header">
+              <strong>{{ post.student_name }}</strong>
+              <span class="time">{{ formatTime(post.created_at) }}</span>
+            </div>
+            <p class="post-body">{{ post.response_text }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createApp, ref, onMounted, onUnmounted } from 'vue'
+    import { createClient } from '@supabase/supabase-js'
+
+    createApp({
+      setup() {
+        // Inicializar cliente con la URL correcta construida desde tu ID
+        const supabaseUrl = 'https://jomqgtqtwgaxdgwywhtg.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpvbXFndHF0d2dheGRnd3l3aHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MTkyNDgsImV4cCI6MjA5ODQ5NTI0OH0.aTKt1oLBpyMMNL0S2Lcv3C1ZyOkmDcxNP2J2BgxluBg'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // Estado Reactivo
+        const name = ref('')
+        const answer = ref('')
+        const posts = ref([])
+        let realtimeChannel = null
+
+        // Traer posts iniciales
+        const fetchPosts = async () => {
+          const { data, error } = await supabase
+            .from('case_study_responses')
+            .select('*')
+            .order('created_at', { ascending: false })
+          
+          if (!error) posts.value = data
+        }
+
+        // Enviar respuesta
+        const submitAnswer = async () => {
+          if (!name.value.trim() || !answer.value.trim()) return
+
+          const { error } = await supabase
+            .from('case_study_responses')
+            .insert([{ student_name: name.value, response_text: answer.value }])
+
+          if (!error) {
+            answer.value = '' // Limpia el textarea pero deja el nombre del alumno
+          }
+        }
+
+        // Dar formato legible a la hora
+        const formatTime = (dateString) => {
+          return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+
+        // Suscribirse a Realtime al montar
+        onMounted(() => {
+          fetchPosts()
+
+          realtimeChannel = supabase
+            .channel('public:case_study_responses')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'case_study_responses' }, (payload) => {
+              posts.value.unshift(payload.new)
+            })
+            .subscribe()
+        })
+
+        // Limpiar canal al destruir
+        onUnmounted(() => {
+          if (realtimeChannel) supabase.removeChannel(realtimeChannel)
+        })
+
+        return {
+          name,
+          answer,
+          posts,
+          submitAnswer,
+          formatTime
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
