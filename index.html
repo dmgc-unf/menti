@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classroom Live Board</title>
-  
+
   <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
 
   <script type="importmap">
@@ -19,50 +20,58 @@
   <style>
     /* Variables de diseño para fácil mantenimiento */
     :root {
-      --bg-main: #0f172a;          /* Azul oscuro profundo */
-      --bg-panel: #1e293b;        /* Azul pizarra para paneles */
-      --bg-card: #293548;         /* Tarjetas de respuestas */
-      --text-main: #f8fafc;       /* Blanco brillante */
-      --text-muted: #94a3b8;      /* Gris azulado para textos secundarios */
-      --accent: #38bdf8;          /* Azul brillante eléctrico para destacar */
+      --bg-main: #0f172a;
+      /* Azul oscuro profundo */
+      --bg-panel: #1e293b;
+      /* Azul pizarra para paneles */
+      --bg-card: #293548;
+      /* Tarjetas de respuestas */
+      --text-main: #f8fafc;
+      /* Blanco brillante */
+      --text-muted: #94a3b8;
+      /* Gris azulado para textos secundarios */
+      --accent: #38bdf8;
+      /* Azul brillante eléctrico para destacar */
       --accent-hover: #0ea5e9;
-      --border: #334155;          /* Bordes sutiles */
+      --border: #334155;
+      /* Bordes sutiles */
     }
 
-    body, html { 
-      margin: 0; 
-      padding: 0; 
-      height: 100vh; 
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
       background-color: var(--bg-main);
       color: var(--text-main);
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    .app-container { 
-      display: flex; 
-      height: 100vh; 
+    .app-container {
+      display: flex;
+      height: 100vh;
     }
 
-    .panel { 
-      padding: 2.5rem; 
-      box-sizing: border-box; 
-      display: flex; 
+    .panel {
+      padding: 2.5rem;
+      box-sizing: border-box;
+      display: flex;
       flex-direction: column;
     }
 
     /* Panel Izquierdo (Formulario) */
-    .input-panel { 
-      width: 40%; 
-      background: var(--bg-panel); 
-      border-right: 1px solid var(--border); 
-      box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+    .input-panel {
+      width: 40%;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
       z-index: 10;
     }
 
     /* Panel Derecho (Feed en tiempo real) */
-    .feed-panel { 
-      width: 60%; 
+    .feed-panel {
+      width: 60%;
       background: var(--bg-main);
     }
 
@@ -95,63 +104,75 @@
     }
 
     @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
+      0% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.6;
+      }
     }
 
-    .prompt { 
-      font-size: 1.1rem; 
-      line-height: 1.5; 
+    .prompt {
+      font-size: 1.1rem;
+      line-height: 1.5;
       color: var(--text-muted);
       margin-bottom: 2rem;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       padding: 1rem;
       border-radius: 8px;
       border-left: 4px solid var(--accent);
     }
 
-    .form-group { 
-      margin-bottom: 1.5rem; 
+    .form-group {
+      margin-bottom: 1.5rem;
     }
 
-    label { 
-      display: block; 
-      font-weight: 600; 
+    label {
+      display: block;
+      font-weight: 600;
       font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.5rem; 
+      margin-bottom: 0.5rem;
       color: var(--text-muted);
     }
 
-    input, textarea { 
-      width: 100%; 
-      padding: 0.9rem; 
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.9rem;
       background: var(--bg-main);
-      border: 1px solid var(--border); 
-      border-radius: 8px; 
+      border: 1px solid var(--border);
+      border-radius: 8px;
       color: var(--text-main);
       box-sizing: border-box;
       font-size: 1rem;
       transition: all 0.3s ease;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
 
-    textarea { resize: none; }
+    textarea {
+      resize: none;
+    }
 
-    button { 
-      background: var(--accent); 
-      color: var(--bg-main); 
-      padding: 1rem; 
-      border: none; 
-      border-radius: 8px; 
-      cursor: pointer; 
+    button {
+      background: var(--accent);
+      color: var(--bg-main);
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
       font-weight: 700;
       font-size: 1rem;
       letter-spacing: 0.02em;
@@ -160,7 +181,7 @@
       box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
     }
 
-    button:hover:not(:disabled) { 
+    button:hover:not(:disabled) {
       background: var(--accent-hover);
       transform: translateY(-1px);
     }
@@ -169,37 +190,39 @@
       transform: translateY(1px);
     }
 
-    button:disabled { 
-      background: var(--border); 
+    button:disabled {
+      background: var(--border);
       color: var(--text-muted);
       cursor: not-allowed;
       box-shadow: none;
     }
 
     /* Contenedor del Feed con Scrollbar estilizada */
-    .feed-container { 
-      flex-grow: 1; 
-      overflow-y: auto; 
-      padding-right: 10px; 
+    .feed-container {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
     }
 
     .feed-container::-webkit-scrollbar {
       width: 6px;
     }
+
     .feed-container::-webkit-scrollbar-track {
       background: transparent;
     }
+
     .feed-container::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 3px;
     }
 
     /* Tarjetas de Respuestas */
-    .post-card { 
-      background: var(--bg-card); 
-      padding: 1.25rem; 
-      border-radius: 10px; 
-      margin-bottom: 1.25rem; 
+    .post-card {
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
       border: 1px solid var(--border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -207,8 +230,15 @@
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .post-card:hover {
@@ -216,10 +246,10 @@
       border-color: rgba(56, 189, 248, 0.3);
     }
 
-    .post-header { 
-      display: flex; 
-      justify-content: space-between; 
-      margin-bottom: 0.75rem; 
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
       font-size: 0.95rem;
     }
 
@@ -228,11 +258,28 @@
       font-weight: 600;
     }
 
-    .time { color: var(--text-muted); font-size: 0.85rem; }
-    .post-body { margin: 0; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; font-size: 1rem; }
-    .empty { color: var(--text-muted); font-style: italic; text-align: center; padding-top: 3rem; }
+    .time {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .post-body {
+      margin: 0;
+      line-height: 1.6;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      font-size: 1rem;
+    }
+
+    .empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding-top: 3rem;
+    }
   </style>
 </head>
+
 <body>
 
   <div id="app">
@@ -240,7 +287,7 @@
       <div class="panel input-panel">
         <h2>{{ currentTitle }}</h2>
         <p class="prompt">{{ currentQuestion }}</p>
-        
+
         <div class="form-group">
           <label>Your Name</label>
           <input v-model="name" type="text" placeholder="e.g., Jessica" />
@@ -256,7 +303,7 @@
 
       <div class="panel feed-panel">
         <h2>
-          Peer Submissions 
+          Peer Submissions
           <span class="live-badge">● LIVE</span>
         </h2>
         <div class="feed-container">
@@ -288,6 +335,7 @@
 
         // Banco de preguntas (Opción 1 adaptada)
         const bancoDePreguntas = {
+          // 610
           '610-course-expectations': {
             title: 'DMGC 610 - Course Expectations',
             question: 'Tell me three course expectations you have.'
@@ -296,7 +344,7 @@
             title: 'Module 1 Check-in',
             question: "What did you think of this week's module, or what were your first impressions?"
           },
-           '610-module2-checkin': {
+          '610-module2-checkin': {
             title: 'Module 2 Check-in',
             question: "What did you think of this week's module, or what were your first impressions?"
           },
@@ -307,7 +355,30 @@
           '610-module2-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of understanding data types, populations and samples?'
+          },
+          //  620
+
+          '620-course-expectations': {
+            title: 'DMGC 620 - Course Expectations',
+            question: 'Tell me three course expectations you have.'
+          },
+          '620-module1-checkin': {
+            title: 'Module 1 Check-in',
+            question: "What did you think of this week's module, or what were your first impressions?"
+          },
+          '620-module2-checkin': {
+            title: 'Module 2 Check-in',
+            question: "What did you think of this week's module, or what were your first impressions?"
+          },
+          '620-module1-conclusion': {
+            title: 'Module Takeaway',
+            question: 'In conclusion, what do you consider to be the key importance of studying conpcepts like the Metaverse & other emerging technologies?'
+          },
+          '620-module2-conclusion': {
+            title: 'Module Takeaway',
+            question: 'In conclusion, what do you consider to be the key importance of understanding data types, populations and samples?'
           }
+
         }
 
         const currentTitle = computed(() => {
@@ -329,7 +400,7 @@
             .select('*')
             .eq('session_id', sessionId.value)
             .order('created_at', { ascending: false })
-          
+
           if (!error) posts.value = data
         }
 
@@ -338,8 +409,8 @@
 
           const { error } = await supabase
             .from('case_study_responses')
-            .insert([{ 
-              student_name: name.value, 
+            .insert([{
+              student_name: name.value,
               response_text: answer.value,
               session_id: sessionId.value
             }])
@@ -358,9 +429,9 @@
 
           realtimeChannel = supabase
             .channel(`public:case_study_responses:${sessionId.value}`)
-            .on('postgres_changes', { 
-              event: 'INSERT', 
-              schema: 'public', 
+            .on('postgres_changes', {
+              event: 'INSERT',
+              schema: 'public',
               table: 'case_study_responses',
               filter: `session_id=eq.${sessionId.value}`
             }, (payload) => {
@@ -386,4 +457,5 @@
     }).mount('#app')
   </script>
 </body>
+
 </html>
