@@ -243,7 +243,8 @@
 
     .post-card:hover {
       transform: scale(1.01);
-      border-color: rgba(56, 189, 248, 0.3);
+      border-color: var(--accent);
+      /* Cambiado para usar el color del curso */
     }
 
     .post-header {
@@ -282,7 +283,7 @@
 
 <body>
 
-  <div id="app">
+  <div id="app" :style="themeStyles">
     <div class="app-container">
       <div class="panel input-panel">
         <h2>{{ currentTitle }}</h2>
@@ -346,7 +347,7 @@
           },
           '570-module2-checkin': {
             title: 'Module 2 Check-in',
-            question: "What were your first impressions of Module 2?"
+            question: "What were your first impressions of Module 2? What social media platforms do you use personally or for work?"
           },
           '570-module1-conclusion': {
             title: 'Module Takeaway',
@@ -410,6 +411,31 @@
           return bancoDePreguntas[sessionId.value]?.question || 'Please answer the prompt below:'
         })
 
+        // Detecta el curso (570, 610, 620) y asigna los colores de acento correspondientes
+        const themeStyles = computed(() => {
+          const session = sessionId.value || '';
+
+          let accentColor = '#38bdf8';       // Azul por defecto (General)
+          let accentHoverColor = '#0ea5e9';  // Azul hover por defecto
+
+          if (session.startsWith('570')) {
+            accentColor = '#e76366';       // Azul para 570
+            accentHoverColor = '#8355eb';
+          } else if (session.startsWith('610')) {
+            accentColor = '#22c55e';       // Verde para 610
+            accentHoverColor = '#16a34a';
+          } else if (session.startsWith('620')) {
+            accentColor = '#a855f7';       // Morado/Violeta para 620 (ejemplo)
+            accentHoverColor = '#9333ea';
+          }
+
+          // Retornamos un objeto con las variables CSS mapeadas
+          return {
+            '--accent': accentColor,
+            '--accent-hover': accentHoverColor
+          }
+        })
+
         const name = ref('')
         const answer = ref('')
         const posts = ref([])
@@ -471,6 +497,7 @@
           posts,
           currentTitle,
           currentQuestion,
+          themeStyles, // <--- Agregar aquí
           submitAnswer,
           formatTime
         }
