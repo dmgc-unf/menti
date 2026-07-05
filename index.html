@@ -415,7 +415,9 @@
         const themeStyles = computed(() => {
           const session = sessionId.value || '';
 
-          let accentColor = '#38bdf8';       // Azul por defecto (General)
+          // let accentColor = '#38bdf8';       // Azul por defecto (General)
+          let accentColor = 'red';       // Azul por defecto (General)
+
           let accentHoverColor = '#0ea5e9';  // Azul hover por defecto
 
           if (session.startsWith('570')) {
