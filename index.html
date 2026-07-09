@@ -183,6 +183,7 @@
 
     button:hover:not(:disabled) {
       background: var(--accent-hover);
+      /* This ensures it reads the dynamic Vue color */
       transform: translateY(-1px);
     }
 
@@ -283,7 +284,7 @@
 
 <body>
 
-  <div id="app" :style="themeStyles">
+  <div id="app">
     <div class="app-container">
       <div class="panel input-panel">
         <h2>{{ currentTitle }}</h2>
@@ -336,7 +337,7 @@
 
         // Banco de preguntas (Opción 1 adaptada)
         const bancoDePreguntas = {
-           // 510
+          // 510
           '510-course-expectations': {
             title: 'DMGC 570 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -411,7 +412,7 @@
           },
           '620-module2-checkin': {
             title: 'Module 2 Check-in',
-            question: "What did you think of this week's module, or what were your first impressions?"
+            question: "Did you find any concepts from the modules difficult to understand? What about the concept of the Metaverse?"
           },
           '620-module1-conclusion': {
             title: 'Module Takeaway',
@@ -432,32 +433,86 @@
           return bancoDePreguntas[sessionId.value]?.question || 'Please answer the prompt below:'
         })
 
-        // Detecta el curso (570, 610, 620) y asigna los colores de acento correspondientes
-        const themeStyles = computed(() => {
+        // // Detecta el curso (570, 610, 620) y asigna los colores de acento correspondientes
+        // const themeStyles = computed(() => {
+        //   const session = sessionId.value || '';
+
+        //   // let accentColor = '#38bdf8';       // Azul por defecto (General)
+        //   let accentColor = 'red';       // Azul por defecto (General)
+
+        //   let accentHoverColor = '#0ea5e9';  // Azul hover por defecto
+
+        //   if (session.startsWith('570')) {
+        //     accentColor = '#e76366';       // Azul para 570
+        //     accentHoverColor = '#8355eb';
+        //   } else if (session.startsWith('610')) {
+        //     accentColor = '#22c55e';       // Verde para 610
+        //     accentHoverColor = '#16a34a';
+        //   } else if (session.startsWith('620')) {
+        //     accentColor = '#a855f7';       // Morado/Violeta para 620 (ejemplo)
+        //     accentHoverColor = '#9333ea';
+        //   }
+
+        //   // Retornamos un objeto con las variables CSS mapeadas
+        //   return {
+        //     '--accent': accentColor,
+        //     '--accent-hover': accentHoverColor
+        //   }
+        // })
+
+        // Keep track of the colors based on the session
+        const updateGlobalTheme = () => {
           const session = sessionId.value || '';
+          let bgMain = '#0f172a';
+          let bgPanel = '#0f172a'; 
+          let accentColor = '#38bdf8';       // Default Sky Blue
+          let accentHoverColor = '#0ea5e9';
+          let textColorMain = '#f8fafc';
+          let textMuted = 'white';
+          
+        
 
-          // let accentColor = '#38bdf8';       // Azul por defecto (General)
-          let accentColor = 'red';       // Azul por defecto (General)
+          if (session.startsWith('510') || session.startsWith('570')) {
+            bgMain = '#FF8AFF';
+            bgPanel = '#FF8AFF';
+            accentColor = '#e76366';       // Coral / Rose
+            accentHoverColor = '#cc4b4e';
+            textColorMain = '#f8fafc';
+            textMuted = 'white';
 
-          let accentHoverColor = '#0ea5e9';  // Azul hover por defecto
-
-          if (session.startsWith('570')) {
-            accentColor = '#e76366';       // Azul para 570
-            accentHoverColor = '#8355eb';
           } else if (session.startsWith('610')) {
-            accentColor = '#22c55e';       // Verde para 610
+            bgMain = '#FF8AFF';
+            bgPanel = '#FF8AFF';
+            accentColor = '#22c55e';       // Green
             accentHoverColor = '#16a34a';
+            textColorMain = '#f8fafc';
+            textMuted = 'white';
+
           } else if (session.startsWith('620')) {
-            accentColor = '#a855f7';       // Morado/Violeta para 620 (ejemplo)
+            bgMain = '#3CB371';
+            bgPanel = '#3CB371';
+            accentColor = 'white';       // Purple
             accentHoverColor = '#9333ea';
+            textColorMain = '#f8fafc';
+            textMuted = 'white';
           }
 
-          // Retornamos un objeto con las variables CSS mapeadas
-          return {
-            '--accent': accentColor,
-            '--accent-hover': accentHoverColor
-          }
-        })
+          // Directly inject variables into the document root element
+          document.documentElement.style.setProperty('--bg-main', bgMain);
+          document.documentElement.style.setProperty('--bg-panel', bgPanel);
+          document.documentElement.style.setProperty('--text-main', textColorMain);
+          document.documentElement.style.setProperty('--text-muted', textMuted);
+          document.documentElement.style.setProperty('--accent', accentColor);
+
+          document.documentElement.style.setProperty('--accent', accentColor);
+          document.documentElement.style.setProperty('--accent-hover', accentHoverColor);
+        }
+
+        //     --bg-main: #0f172a;
+        // --bg-panel: #1e293b;
+        // --bg-card: #293548;
+        // --text-main: #f8fafc;
+        // --text-muted: #94a3b8;
 
         const name = ref('')
         const answer = ref('')
@@ -496,6 +551,7 @@
 
         onMounted(() => {
           fetchPosts()
+          updateGlobalTheme(); // <--- Theme update
 
           realtimeChannel = supabase
             .channel(`public:case_study_responses:${sessionId.value}`)
@@ -510,6 +566,8 @@
             .subscribe()
         })
 
+
+
         onUnmounted(() => {
           if (realtimeChannel) supabase.removeChannel(realtimeChannel)
         })
@@ -520,7 +578,6 @@
           posts,
           currentTitle,
           currentQuestion,
-          themeStyles, // <--- Agregar aquí
           submitAnswer,
           formatTime
         }
