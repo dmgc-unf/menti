@@ -96,7 +96,7 @@
     .live-badge {
       font-size: 0.8rem;
       background: rgba(56, 189, 248, 0.15);
-      color: var(--accent);
+      color: var(--text-muted);
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
       border: 1px solid rgba(56, 189, 248, 0.3);
@@ -420,7 +420,7 @@
           },
           '620-module2-conclusion': {
             title: 'Module Takeaway',
-            question: 'In conclusion, what do you consider to be the key importance of understanding data types, populations and samples?'
+            question: 'In conclusion, what do you consider to be ...?'
           }
 
         }
@@ -464,37 +464,48 @@
         const updateGlobalTheme = () => {
           const session = sessionId.value || '';
           let bgMain = '#0f172a';
-          let bgPanel = '#0f172a'; 
+          let bgPanel = '#0f172a';
+          let bgCard = '#293548';
+
           let accentColor = '#38bdf8';       // Default Sky Blue
           let accentHoverColor = '#0ea5e9';
           let textColorMain = '#f8fafc';
           let textMuted = 'white';
-          
-        
+          let border = '#334155';
+
+
 
           if (session.startsWith('510') || session.startsWith('570')) {
             bgMain = '#FF8AFF';
             bgPanel = '#FF8AFF';
+            bgCard = '#FF8AFF';
             accentColor = '#e76366';       // Coral / Rose
             accentHoverColor = '#cc4b4e';
             textColorMain = '#f8fafc';
             textMuted = 'white';
+            border = '#334155';
 
           } else if (session.startsWith('610')) {
             bgMain = '#FF8AFF';
             bgPanel = '#FF8AFF';
+            bgCard = '#FF8AFF';
+
             accentColor = '#22c55e';       // Green
             accentHoverColor = '#16a34a';
             textColorMain = '#f8fafc';
             textMuted = 'white';
+            border = '#334155';
 
           } else if (session.startsWith('620')) {
             bgMain = '#3CB371';
             bgPanel = '#3CB371';
-            accentColor = 'white';       // Purple
+            bgCard = '#3CB371';
+
+            accentColor = '#334155';       // Purple
             accentHoverColor = '#9333ea';
             textColorMain = '#f8fafc';
             textMuted = 'white';
+            border = '#334155';
           }
 
           // Directly inject variables into the document root element
@@ -503,9 +514,8 @@
           document.documentElement.style.setProperty('--text-main', textColorMain);
           document.documentElement.style.setProperty('--text-muted', textMuted);
           document.documentElement.style.setProperty('--accent', accentColor);
-
-          document.documentElement.style.setProperty('--accent', accentColor);
-          document.documentElement.style.setProperty('--accent-hover', accentHoverColor);
+          document.documentElement.style.setProperty('--bg-card', bgCard);
+          document.documentElement.style.setProperty('--border', border);
         }
 
         //     --bg-main: #0f172a;
@@ -513,6 +523,7 @@
         // --bg-card: #293548;
         // --text-main: #f8fafc;
         // --text-muted: #94a3b8;
+        //--border: #334155
 
         const name = ref('')
         const answer = ref('')
