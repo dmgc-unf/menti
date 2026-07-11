@@ -19,22 +19,24 @@
 
   <style>
     /* Variables de diseño para fácil mantenimiento */
+    /* Variables de diseño minimalistas y neutrales */
     :root {
-      --bg-main: #0f172a;
-      /* Azul oscuro profundo */
-      --bg-panel: #1e293b;
-      /* Azul pizarra para paneles */
-      --bg-card: #293548;
-      /* Tarjetas de respuestas */
-      --text-main: #f8fafc;
-      /* Blanco brillante */
-      --text-muted: #94a3b8;
-      /* Gris azulado para textos secundarios */
-      --accent: #38bdf8;
-      /* Azul brillante eléctrico para destacar */
-      --accent-hover: #0ea5e9;
-      --border: #334155;
-      /* Bordes sutiles */
+      --bg-main: #ffffff;
+      /* Fondo puro blanco */
+      --bg-panel: #fafafa;
+      /* Gris casi imperceptible para el panel lateral */
+      --bg-card: #ffffff;
+      /* Tarjetas limpias sobre el fondo principal */
+      --text-main: #111111;
+      /* Texto negro de alta legibilidad */
+      --text-muted: #666666;
+      /* Gris medio para descripciones secundarios */
+      --accent: #111111;
+      /* Negro puro para botones y acentos de autoría */
+      --accent-hover: #333333;
+      /* Gris oscuro al pasar el ratón */
+      --border: #e5e5e5;
+      /* Bordes delgados y muy tenues */
     }
 
     body,
@@ -120,7 +122,7 @@
     .prompt {
       font-size: 1.1rem;
       line-height: 1.5;
-      color: var(--text-muted);
+      color: var(--text-main);
       margin-bottom: 2rem;
       background: rgba(255, 255, 255, 0.02);
       padding: 1rem;
@@ -168,7 +170,8 @@
 
     button {
       background: var(--accent);
-      color: var(--bg-main);
+      color: #ffffff;
+      /* Forzado a blanco para perfecto contraste con el botón negro */
       padding: 1rem;
       border: none;
       border-radius: 8px;
@@ -268,7 +271,7 @@
     .post-body {
       margin: 0;
       line-height: 1.6;
-      color: #e2e8f0;
+      color: var(--text-main);
       white-space: pre-wrap;
       font-size: 1rem;
     }
@@ -461,54 +464,75 @@
         // })
 
         // Keep track of the colors based on the session
+        // const updateGlobalTheme = () => {
+        //     const session = sessionId.value || '';
+        //     let bgMain = '#0f172a';
+        //     let bgPanel = '#0f172a';
+        //     let bgCard = '#293548';
+
+        //     let accentColor = '#38bdf8';       // Default Sky Blue
+        //     let accentHoverColor = '#0ea5e9';
+        //     let textColorMain = '#f8fafc';
+        //     let textMuted = 'white';
+        //     let border = '#334155';
+
+
+
+        //     if (session.startsWith('510') || session.startsWith('570')) {
+        //       bgMain = '#FF8AFF';
+        //       bgPanel = '#FF8AFF';
+        //       bgCard = '#FF8AFF';
+        //       accentColor = '#e76366';       // Coral / Rose
+        //       accentHoverColor = '#cc4b4e';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+
+        //     } else if (session.startsWith('610')) {
+        //       bgMain = '#FF8AFF';
+        //       bgPanel = '#FF8AFF';
+        //       bgCard = '#FF8AFF';
+
+        //       accentColor = '#22c55e';       // Green
+        //       accentHoverColor = '#16a34a';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+
+        //     } else if (session.startsWith('620')) {
+        //       bgMain = '#3CB371';
+        //       bgPanel = '#3CB371';
+        //       bgCard = '#3CB371';
+
+        //       accentColor = '#334155';       // Purple
+        //       accentHoverColor = '#9333ea';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+        //     }
+
+        //     // Directly inject variables into the document root element
+        //     document.documentElement.style.setProperty('--bg-main', bgMain);
+        //     document.documentElement.style.setProperty('--bg-panel', bgPanel);
+        //     document.documentElement.style.setProperty('--text-main', textColorMain);
+        //     document.documentElement.style.setProperty('--text-muted', textMuted);
+        //     document.documentElement.style.setProperty('--accent', accentColor);
+        //     document.documentElement.style.setProperty('--bg-card', bgCard);
+        //     document.documentElement.style.setProperty('--border', border);
+        //   }
+
+        // Configuración de interfaz monocromática unificada para todas las sesiones
         const updateGlobalTheme = () => {
-          const session = sessionId.value || '';
-          let bgMain = '#0f172a';
-          let bgPanel = '#0f172a';
-          let bgCard = '#293548';
+          let bgMain = '#ffffff';
+          let bgPanel = '#fafafa';
+          let bgCard = '#ffffff';
+          let accentColor = '#111111';
+          let accentHoverColor = '#333333';
+          let textColorMain = '#111111';
+          let textMuted = '#666666';
+          let border = '#e5e5e5';
 
-          let accentColor = '#38bdf8';       // Default Sky Blue
-          let accentHoverColor = '#0ea5e9';
-          let textColorMain = '#f8fafc';
-          let textMuted = 'white';
-          let border = '#334155';
-
-
-
-          if (session.startsWith('510') || session.startsWith('570')) {
-            bgMain = '#FF8AFF';
-            bgPanel = '#FF8AFF';
-            bgCard = '#FF8AFF';
-            accentColor = '#e76366';       // Coral / Rose
-            accentHoverColor = '#cc4b4e';
-            textColorMain = '#f8fafc';
-            textMuted = 'white';
-            border = '#334155';
-
-          } else if (session.startsWith('610')) {
-            bgMain = '#FF8AFF';
-            bgPanel = '#FF8AFF';
-            bgCard = '#FF8AFF';
-
-            accentColor = '#22c55e';       // Green
-            accentHoverColor = '#16a34a';
-            textColorMain = '#f8fafc';
-            textMuted = 'white';
-            border = '#334155';
-
-          } else if (session.startsWith('620')) {
-            bgMain = '#3CB371';
-            bgPanel = '#3CB371';
-            bgCard = '#3CB371';
-
-            accentColor = '#334155';       // Purple
-            accentHoverColor = '#9333ea';
-            textColorMain = '#f8fafc';
-            textMuted = 'white';
-            border = '#334155';
-          }
-
-          // Directly inject variables into the document root element
+          // Inyección directa de las variables en el documento
           document.documentElement.style.setProperty('--bg-main', bgMain);
           document.documentElement.style.setProperty('--bg-panel', bgPanel);
           document.documentElement.style.setProperty('--text-main', textColorMain);
@@ -517,13 +541,6 @@
           document.documentElement.style.setProperty('--bg-card', bgCard);
           document.documentElement.style.setProperty('--border', border);
         }
-
-        //     --bg-main: #0f172a;
-        // --bg-panel: #1e293b;
-        // --bg-card: #293548;
-        // --text-main: #f8fafc;
-        // --text-muted: #94a3b8;
-        //--border: #334155
 
         const name = ref('')
         const answer = ref('')
