@@ -18,6 +18,7 @@
   </script>
 
   <style>
+    /* Variables de diseño para fácil mantenimiento */
     /* Variables de diseño minimalistas y neutrales */
     :root {
       --bg-main: #ffffff;
@@ -31,7 +32,7 @@
       --text-muted: #666666;
       /* Gris medio para descripciones secundarios */
       --accent: #111111;
-      /* Negro puro para botones y acentos */
+      /* Negro puro para botones y acentos de autoría */
       --accent-hover: #333333;
       /* Gris oscuro al pasar el ratón */
       --border: #e5e5e5;
@@ -66,9 +67,8 @@
       width: 40%;
       background: var(--bg-panel);
       border-right: 1px solid var(--border);
-      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.03);
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
       z-index: 10;
-      overflow-y: auto;
     }
 
     /* Panel Derecho (Feed en tiempo real) */
@@ -78,13 +78,13 @@
     }
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 700;
       margin-top: 0;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
       letter-spacing: -0.02em;
       color: var(--text-main);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
       padding-bottom: 0.75rem;
     }
 
@@ -94,63 +94,50 @@
       align-items: center;
     }
 
-    /* Redesigned Question Display */
-    .question-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-      position: relative;
-    }
-
-    .question-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.725rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .question-text {
-      font-size: 1.15rem;
-      line-height: 1.6;
-      font-weight: 500;
-      color: var(--text-main);
-      margin: 0;
-    }
-
     /* Indicador de "Live" parpadeante */
     .live-badge {
       font-size: 0.8rem;
-      background: var(--bg-panel);
+      background: rgba(56, 189, 248, 0.15);
       color: var(--text-muted);
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(56, 189, 248, 0.3);
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
+      0% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.6;
+      }
+    }
+
+    .prompt {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--text-main);
+      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
     }
 
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
 
     label {
       display: block;
       font-weight: 600;
-      font-size: 0.825rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 0.5rem;
@@ -161,20 +148,20 @@
     textarea {
       width: 100%;
       padding: 0.9rem;
-      background: var(--bg-card);
+      background: var(--bg-main);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text-main);
       box-sizing: border-box;
-      font-size: 0.95rem;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      font-size: 1rem;
+      transition: all 0.3s ease;
     }
 
     input:focus,
     textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
 
     textarea {
@@ -182,22 +169,24 @@
     }
 
     button {
-      width: 100%;
       background: var(--accent);
       color: #ffffff;
+      /* Forzado a blanco para perfecto contraste con el botón negro */
       padding: 1rem;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1rem;
       letter-spacing: 0.02em;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-      margin-top: 0.5rem;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
     }
 
     button:hover:not(:disabled) {
       background: var(--accent-hover);
+      /* This ensures it reads the dynamic Vue color */
       transform: translateY(-1px);
     }
 
@@ -239,8 +228,8 @@
       border-radius: 10px;
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-      transition: border-color 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       animation: slideIn 0.4s ease-out;
     }
 
@@ -257,8 +246,9 @@
     }
 
     .post-card:hover {
-      transform: translateY(-2px);
+      transform: scale(1.01);
       border-color: var(--accent);
+      /* Cambiado para usar el color del curso */
     }
 
     .post-header {
@@ -283,7 +273,7 @@
       line-height: 1.6;
       color: var(--text-main);
       white-space: pre-wrap;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .empty {
@@ -299,21 +289,9 @@
 
   <div id="app">
     <div class="app-container">
-      <!-- Panel Izquierdo Mejorado -->
       <div class="panel input-panel">
         <h2>{{ currentTitle }}</h2>
-
-        <div class="question-card">
-          <div class="question-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            Prompt / Question
-          </div>
-          <p class="question-text">{{ currentQuestion }}</p>
-        </div>
+        <p class="prompt">{{ currentQuestion }}</p>
 
         <div class="form-group">
           <label>Your Name</label>
@@ -322,13 +300,12 @@
 
         <div class="form-group">
           <label>Your Response</label>
-          <textarea v-model="answer" rows="5" placeholder="Write your thoughts here..."></textarea>
+          <textarea v-model="answer" rows="6" placeholder="Write your thoughts here..."></textarea>
         </div>
 
         <button @click="submitAnswer" :disabled="!name.trim() || !answer.trim()">Submit to Board</button>
       </div>
 
-      <!-- Panel Derecho -->
       <div class="panel feed-panel">
         <h2>
           Peer Submissions
@@ -361,7 +338,9 @@
         const urlParams = new URLSearchParams(window.location.search)
         const sessionId = ref(urlParams.get('session') || 'general')
 
+        // Banco de preguntas (Opción 1 adaptada)
         const bancoDePreguntas = {
+          // 510
           '510-course-expectations': {
             title: 'DMGC 570 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -382,6 +361,7 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of understanding platform mechanics and audience behavior?'
           },
+          //525
           '525-course-expectations': {
             title: 'DMGC 525 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -394,6 +374,7 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of reflecting about the ethics of digital media and AI, knowing about legislations like PIPEDA, and learning about digital citizenship?'
           },
+
           '525-module2-checkin': {
             title: 'Module 1 Check-in',
             question: "What were your first impressions of Module 2?"
@@ -402,6 +383,7 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of ...?'
           },
+
           '525-module3-checkin': {
             title: 'Module 1 Check-in',
             question: "What were your first impressions of Module 3?"
@@ -410,14 +392,16 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of ...?'
           },
+
           '525-module4-checkin': {
             title: 'Module Check-in',
-            question: "What were your first impressions of Module 4? Were you aware of the concept of 'Netiquette'?"
+            question: "What were your first impressions of Module 4? Were you aware of the concept of 'Netiquette'? "
           },
           '525-module4-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of learning about online etiquette and expectations for different communities of people?'
           },
+          // 570
           '570-course-expectations': {
             title: 'DMGC 570 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -442,10 +426,12 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of understanding platform mechanics and audience behavior?'
           },
+          // assignment checkin
           '570-assignment1-checkin': {
             title: 'Assignment 1 Check-in',
             question: 'How are you doing with Assignment 1? Have you finished planning your campaign and setting up your social media pages?'
           },
+          // 610
           '610-course-expectations': {
             title: 'DMGC 610 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -454,6 +440,7 @@
             title: 'Module 1 Check-in',
             question: "What were your first impressions on Module 1? And, what experience do you have with data analysis?"
           },
+         
           '610-module1-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of studying data analytics in a digital media context?'
@@ -466,6 +453,7 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of understanding data types, populations and samples?'
           },
+
           '610-module3-checkin': {
             title: 'Module 3 Check-in',
             question: "What did you think of this week's module? Were you able to practice the descriptive statistics calculations shown in the module?"
@@ -474,6 +462,8 @@
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of learning about descriptive statistics in digital media?'
           },
+          //  620
+
           '620-course-expectations': {
             title: 'DMGC 620 - Course Expectations',
             question: 'Tell me three course expectations you have for this course.'
@@ -482,26 +472,31 @@
             title: 'Module 1 Check-in',
             question: "What did you think of this week's module? What experience do you have with Virtual Reality (VR)?"
           },
-          '620-module1-conclusion': {
+            '620-module1-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the key importance of studying concepts like the Metaverse & other emerging technologies?'
           },
+
           '620-module2-checkin': {
             title: 'Module 2 Check-in',
             question: "Did you find any concepts from the modules difficult to understand? What about the concept of the Metaverse?"
           },
+        
           '620-module2-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the importance of knowing the connection between the Metaverse and the game industry?'
-          },
+          }, 
+
           '620-module3-checkin': {
             title: 'Module Check-in',
             question: "Did you find any concepts from the modules difficult to understand? What about the elements of content creation and design in immersive environments?"
           },
+        
           '620-module3-conclusion': {
             title: 'Module Takeaway',
             question: 'In conclusion, what do you consider to be the importance of exploring VR content creation terminology such as assets, mechanics, narrative, etc?'
           }
+
         }
 
         const currentTitle = computed(() => {
@@ -512,6 +507,92 @@
           return bancoDePreguntas[sessionId.value]?.question || 'Please answer the prompt below:'
         })
 
+        // // Detecta el curso (570, 610, 620) y asigna los colores de acento correspondientes
+        // const themeStyles = computed(() => {
+        //   const session = sessionId.value || '';
+
+        //   // let accentColor = '#38bdf8';       // Azul por defecto (General)
+        //   let accentColor = 'red';       // Azul por defecto (General)
+
+        //   let accentHoverColor = '#0ea5e9';  // Azul hover por defecto
+
+        //   if (session.startsWith('570')) {
+        //     accentColor = '#e76366';       // Azul para 570
+        //     accentHoverColor = '#8355eb';
+        //   } else if (session.startsWith('610')) {
+        //     accentColor = '#22c55e';       // Verde para 610
+        //     accentHoverColor = '#16a34a';
+        //   } else if (session.startsWith('620')) {
+        //     accentColor = '#a855f7';       // Morado/Violeta para 620 (ejemplo)
+        //     accentHoverColor = '#9333ea';
+        //   }
+
+        //   // Retornamos un objeto con las variables CSS mapeadas
+        //   return {
+        //     '--accent': accentColor,
+        //     '--accent-hover': accentHoverColor
+        //   }
+        // })
+
+        // Keep track of the colors based on the session
+        // const updateGlobalTheme = () => {
+        //     const session = sessionId.value || '';
+        //     let bgMain = '#0f172a';
+        //     let bgPanel = '#0f172a';
+        //     let bgCard = '#293548';
+
+        //     let accentColor = '#38bdf8';       // Default Sky Blue
+        //     let accentHoverColor = '#0ea5e9';
+        //     let textColorMain = '#f8fafc';
+        //     let textMuted = 'white';
+        //     let border = '#334155';
+
+
+
+        //     if (session.startsWith('510') || session.startsWith('570')) {
+        //       bgMain = '#FF8AFF';
+        //       bgPanel = '#FF8AFF';
+        //       bgCard = '#FF8AFF';
+        //       accentColor = '#e76366';       // Coral / Rose
+        //       accentHoverColor = '#cc4b4e';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+
+        //     } else if (session.startsWith('610')) {
+        //       bgMain = '#FF8AFF';
+        //       bgPanel = '#FF8AFF';
+        //       bgCard = '#FF8AFF';
+
+        //       accentColor = '#22c55e';       // Green
+        //       accentHoverColor = '#16a34a';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+
+        //     } else if (session.startsWith('620')) {
+        //       bgMain = '#3CB371';
+        //       bgPanel = '#3CB371';
+        //       bgCard = '#3CB371';
+
+        //       accentColor = '#334155';       // Purple
+        //       accentHoverColor = '#9333ea';
+        //       textColorMain = '#f8fafc';
+        //       textMuted = 'white';
+        //       border = '#334155';
+        //     }
+
+        //     // Directly inject variables into the document root element
+        //     document.documentElement.style.setProperty('--bg-main', bgMain);
+        //     document.documentElement.style.setProperty('--bg-panel', bgPanel);
+        //     document.documentElement.style.setProperty('--text-main', textColorMain);
+        //     document.documentElement.style.setProperty('--text-muted', textMuted);
+        //     document.documentElement.style.setProperty('--accent', accentColor);
+        //     document.documentElement.style.setProperty('--bg-card', bgCard);
+        //     document.documentElement.style.setProperty('--border', border);
+        //   }
+
+        // Configuración de interfaz monocromática unificada para todas las sesiones
         const updateGlobalTheme = () => {
           let bgMain = '#ffffff';
           let bgPanel = '#fafafa';
@@ -522,6 +603,7 @@
           let textMuted = '#666666';
           let border = '#e5e5e5';
 
+          // Inyección directa de las variables en el documento
           document.documentElement.style.setProperty('--bg-main', bgMain);
           document.documentElement.style.setProperty('--bg-panel', bgPanel);
           document.documentElement.style.setProperty('--text-main', textColorMain);
@@ -568,7 +650,7 @@
 
         onMounted(() => {
           fetchPosts()
-          updateGlobalTheme();
+          updateGlobalTheme(); // <--- Theme update
 
           realtimeChannel = supabase
             .channel(`public:case_study_responses:${sessionId.value}`)
@@ -582,6 +664,8 @@
             })
             .subscribe()
         })
+
+
 
         onUnmounted(() => {
           if (realtimeChannel) supabase.removeChannel(realtimeChannel)
